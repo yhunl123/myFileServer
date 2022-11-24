@@ -15,5 +15,15 @@ module.exports = {
   plugins: [
   ],
   // add your custom rules here
-  rules: {}
+  rules: {
+    'vue/multi-word-component-names': 'off',
+    'vue/no-reserved-component-names': 'off',
+    'quotes': 'off',
+    'semi': 'off',
+    'space-before-function-paren': 'off',
+    'comma-dangle': 'off',
+    'space-before-blocks': 'off',
+    'vue/component-definition-name-casing': 'off',
+    'no-multiple-empty-lines': 'off',
+  }
 }

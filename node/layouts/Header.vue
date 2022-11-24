@@ -1,12 +1,15 @@
 <template>
   <div>
-    <h1>인덱스데스</h1>
+    <h1>헤더입니다.</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'IndexPage',
-
+  name: 'Header'
 }
 </script>
+
+<style scoped>
+
+</style>
