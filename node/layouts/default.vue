@@ -2,7 +2,7 @@
   <div id="app">
     <Header />
     <Nuxt :key="$route.fullPath"/>
-    <Footer />
+<!--    <Footer />-->
   </div>
 </template>
 

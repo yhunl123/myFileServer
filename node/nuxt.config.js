@@ -42,7 +42,11 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    'bootstrap-vue/nuxt',
+    [
+      '@nuxtjs/axios',
+      {proxy: true}
+    ]
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -53,18 +57,24 @@ export default {
 
   proxy: {
     '/api/': {
-      target:'http://localhost:8089/',
-      pathRewrite: { '^/api/': '' }
+      target:'http://localhost:8089/api/',
+      pathRewrite: {'^/api/': ''},
+      changeOrigin: true
     }
+  },
+
+  env: {
+    environment: 'local',
+    baseUrl: 'http://localhost:3000/'
+  },
+
+  server: {
+    port: 3000
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
 
-  },
-
-  server: {
-    port: 3000
   },
 
   lintOnSave: false,
