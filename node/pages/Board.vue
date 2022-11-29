@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 30px;">
+  <div style="margin: 10px;">
     <div>
       <table>
         <colgroup>

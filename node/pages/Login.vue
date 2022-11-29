@@ -62,11 +62,11 @@ export default {
 
       this.$axios.post('/api/login/login', formData)
         .then((res) => {
-          console.log(res);
           const data = res.data.data.view;
           if(res.data.success) {
-            console.log(data)
             localStorage.setItem('userToken', data.userToken);
+
+            this.$router.push('/')
           }
         })
         .catch((err) => {

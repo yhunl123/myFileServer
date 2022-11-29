@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" :key="$route.fullPath">
     <Header />
-    <Nuxt :key="$route.fullPath"/>
+    <Nuxt/>
 <!--    <Footer />-->
   </div>
 </template>
