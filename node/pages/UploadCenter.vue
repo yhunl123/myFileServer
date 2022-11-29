@@ -24,12 +24,18 @@
         @delFile="delFile"
       ></FileUploadForm>
 
-      <b-button type="button" variant="primary" @click="upload" style="margin-top: 10px;">Submit</b-button>
+      <b-button
+        type="button"
+        @click="upload"
+        style="margin-top: 10px; background-color: #ff9c00"
+      >Submit</b-button>
     </div>
   </div>
 </template>
 
 <script>
+import fileService from "~/service/FileService";
+
 export default {
   name: "UploadCenter",
 
@@ -37,21 +43,35 @@ export default {
     return {
       title: '',
       contents: '',
-      file: null,
     }
   },
 
   methods: {
-    upFile(file) {
-      this.file = file;
-    },
-
-    delFile() {
-      this.file = null;
-    },
-
     upload() {
-      console.log(this.file)
+      const params = new FormData();
+      params.append('boardItemTitle', this.title);
+      params.append('boardItemContents', this.contents);
+      params.append('file', this.file);
+
+      this.$axios
+        .post('/api/board/upload', params, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          onUploadProgress: (progressEvent) => {
+            let progressPer = (progressEvent.loaded * 100) / progressEvent.total;
+            let progressSuccess = Math.round(progressPer);
+            this.$store.dispatch('setProgress', progressSuccess);
+          },
+        }).then((res) => {
+          const data = res.data;
+          if (data.success) {
+            console.log('test');
+          }
+        }).catch((err) => {
+          console.log('File upload fail!')
+          console.log('detail :>>>> ', err)
+       })
     },
   },
 

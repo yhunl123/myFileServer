@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import javax.transaction.Transactional;
 import java.util.Map;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     @Query(
         value = "SELECT m.memberId as memberId, " +
@@ -31,6 +31,15 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                 "WHERE m.memberId = :memberId"
     )
     void updateToken(@Param(value = "userToken") String userToken, @Param(value = "memberId") Integer memberId);
+
+    @Query(
+        value = "SELECT m.memberId as memberId, " +
+                "m.memberName as memberName, " +
+                "m.memberAuth as memberAuth " +
+                "FROM Member m " +
+                "WHERE m.userToken = :userToken"
+    )
+    Map<String, Object> findByUserToken(@Param(value = "userToken") String userToken);
 
 
 }

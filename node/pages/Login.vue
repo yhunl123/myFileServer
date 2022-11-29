@@ -24,7 +24,7 @@
         <b-button
           @click="login"
           variant="primary"
-          style="width: 100%;"
+          style="width: 100%; background-color: #ff9c00"
         >
           <span>로그인</span>
           <b-spinner small v-if="isLoading"></b-spinner>
