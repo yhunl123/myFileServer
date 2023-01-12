@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardVO {
+public class BoardItemVO implements Serializable {
     private Integer boardItemId;
 
     private String boardItemTitle;

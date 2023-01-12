@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileVO {
-    private Integer memberId;
+    private Integer fileId;
 
     private String fileName;
 

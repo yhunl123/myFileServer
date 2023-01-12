@@ -1,34 +1,19 @@
 <template>
   <div style="margin: 10px;">
     <div>
-      <table>
-        <colgroup>
-          <col style="width: 15%;" />
-          <col style="width: auto;" />
-          <col style="width: 20%;" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th id="boardId" scope="col">순번</th>
-            <th id="boardTitle" scope="col">글제목</th>
-            <th id="boardCtDate" scope="col">작성일</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, idx) in this.data" :key="idx">
-            <td>{{ item.boardItemId }}</td>
-            <td>
-              <router-link
-                :to="{ name: 'contents', query: { id: item.boardItemId }}"
-                :value="item.boardItemId"
-              >
-                {{ item.boardItemTitle }}
-              </router-link>
-            </td>
-            <td>{{ item.boardItemCtDate }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <b-table
+        :items="items"
+        :fields="fields"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        :bordered="true"
+        :hover="true"
+        head-variant="light"
+      >
+        <template>
+
+        </template>
+      </b-table>
     </div>
 <!--    <page-link-->
 <!--      :pageInfo="this.pageInfo"-->
@@ -45,22 +30,49 @@ export default {
 
   data() {
     return {
-      data: [{
-        boardItemId: '1',
-        boardItemTitle: '2',
-        boardItemCtDate: '3',
-      }],
+      sortBy: 'first_name',
+      sortDesc: false,
+      fields: [
+        { key: 'boardItemId', sortable: true, label: '순번' },
+        { key: 'boardItemTitle', sortable: true, label: '제목' },
+        { key: 'boardItemCtDate', sortable: true, label: '작성일' }
+      ],
+      items: [
+        {
+          boardItemId: '',
+          boardItemTitle: '',
+          boardItemCtDate: '',
+        },
+      ],
 
     }
   },
 
   methods: {
     write() {
-      console.log('test')
+      this.$router.push('/uploadCenter')
     },
+
+    getBoardItem() {
+      this.$axios
+        .get('/api/board/getList')
+        .then((res) => {
+          if (res.data.success) {
+            this.items = res.data.data.view
+            console.log(this.items)
+          }
+        })
+        .catch((err) => {
+          console.log('GetBoard Error :>>>> ', err)
+        })
+    },
+
+
   },
 
   mounted() {
+    this.getBoardItem();
+
 
   },
 

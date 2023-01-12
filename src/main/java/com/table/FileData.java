@@ -7,13 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name = "File")
+@Table(name = "FileData")
 @Entity
 @Data
-public class File {
+public class FileData {
     @Id
     @Column(name = "file_id", nullable = false)
-    private Integer memberId;
+    private Integer fileId;
 
     @Column(name = "file_name", nullable = false)
     private String fileName;
@@ -21,7 +21,7 @@ public class File {
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
-    @Column(name = "board_item_id", nullable = false)
+    @Column(name = "board_item_id")
     private Integer boardItemId;
 
     @Column(name = "file_orig_name", nullable = false)

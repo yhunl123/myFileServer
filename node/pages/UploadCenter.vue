@@ -20,16 +20,37 @@
       ></b-form-textarea>
 
       <FileUploadForm
-        @upFile="upFile"
-        @delFile="delFile"
+        :fileInfo="file"
+        @fileUpload="fileUpload"
+        @deleteFile="deleteFile"
       ></FileUploadForm>
 
       <b-button
         type="button"
         @click="upload"
         style="margin-top: 10px; background-color: #ff9c00"
-      >Submit</b-button>
+      >작성</b-button>
     </div>
+    <b-modal
+      id="upFormModal"
+      title="BootstrapVue"
+      centered
+      hide-footer
+      hide-header
+      no-close-on-esc
+      no-close-on-backdrop
+    >
+      <div class="d-block text-center">
+        <h3>{{modalText}}</h3>
+      </div>
+      <b-button
+        class="mt-3"
+        block
+        @click="$bvModal.hide('upFormModal')"
+        style="background-color: #ff9c00"
+      >확인
+      </b-button>
+    </b-modal>
   </div>
 </template>
 
@@ -43,36 +64,49 @@ export default {
     return {
       title: '',
       contents: '',
+      file: {
+        fileName: '',
+        fileSize: ''
+      },
+      modalText: '',
     }
   },
 
   methods: {
     upload() {
+      if(!this.title) {
+        this.modalText = '제목을 입력해 주세요.'
+        this.$bvModal.show('upFormModal')
+
+        return;
+      }
+
       const params = new FormData();
       params.append('boardItemTitle', this.title);
       params.append('boardItemContents', this.contents);
-      params.append('file', this.file);
+      params.append('fileName', this.file.fileName);
 
       this.$axios
-        .post('/api/board/upload', params, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          onUploadProgress: (progressEvent) => {
-            let progressPer = (progressEvent.loaded * 100) / progressEvent.total;
-            let progressSuccess = Math.round(progressPer);
-            this.$store.dispatch('setProgress', progressSuccess);
-          },
-        }).then((res) => {
+        .post('/api/board/upload', params)
+        .then((res) => {
           const data = res.data;
           if (data.success) {
-            console.log('test');
+            this.$router.push('/board')
           }
         }).catch((err) => {
-          console.log('File upload fail!')
-          console.log('detail :>>>> ', err)
+          console.log('Upload Fail :>>>> ', err)
        })
     },
+
+    fileUpload(data) {
+      this.file = data
+    },
+    deleteFile() {
+      this.file = {
+        fileName: '',
+        fileSize: ''
+      }
+    }
   },
 
   mounted() {

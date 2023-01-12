@@ -1,7 +1,5 @@
 package com.VO.resultVO.apiResult;
 
-import com.VO.resultVO.LoginResult;
-import com.VO.resultVO.ResultVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardItemWrite {
+public class BoardItemList {
+    private Integer boardItemId;
 
+    private String boardItemTitle;
+
+    private String boardItemCtDate;
 
 }

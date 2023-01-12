@@ -2,10 +2,7 @@ package com.table;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table(name = "BoardItem")
 @Entity
@@ -13,6 +10,7 @@ import javax.persistence.Table;
 public class BoardItem {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_item_id", nullable = false)
     private Integer boardItemId;
 

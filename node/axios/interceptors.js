@@ -1,20 +1,11 @@
-import axios from "axios";
+export default function ({$axios, redirect}) {
+  $axios.onRequest((config) => {
+    if(localStorage.getItem('userToken')) {
+      config.headers.common['user-token'] = localStorage.getItem('userToken');
+    }
+  });
 
-const instance = axios.create({
-
-})
-
-instance.interceptors.request.use(
-  (config) => {
-    config.headers.common['user-token'] = localStorage.getItem('userToken');
-
-    return config;
-  }
-)
-
-
-instance.interceptors.response.use(
-  (response) => {
-
-  }
-)
+  $axios.onError((error) => {
+    console.log('Internet server error :>>>> ', error);
+  })
+}

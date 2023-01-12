@@ -37,6 +37,14 @@
 export default {
   name: "FileUploadForm",
   props: {
+    fileInfo: {
+      fileName: {
+        type: String,
+      },
+      fileSize: {
+        type: String,
+      },
+    }
   },
 
   data() {
@@ -47,7 +55,9 @@ export default {
 
   methods: {
     upFile() {
-      console.log(this.file);
+      if(!this.file){
+        return;
+      }
 
       const params = new FormData();
       params.append('file', this.file);
@@ -65,7 +75,7 @@ export default {
         }).then((res) => {
         const data = res.data;
         if (data.success) {
-          console.log('test');
+          this.$emit('fileUpload', data.data.view);
         }
       }).catch((err) => {
         console.log('File upload fail!')
@@ -74,6 +84,18 @@ export default {
     },
 
     delFile() {
+      const params = new FormData();
+      params.append('fileName', this.fileInfo.fileName);
+
+      this.$axios
+        .post('/api/file/deleteFile', params)
+        .then((res) => {
+          this.$emit('deleteFile');
+        })
+        .catch((err) => {
+          console.log('uploadCancle fail :>>>> ', err)
+        })
+
       this.file = null;
     },
   }

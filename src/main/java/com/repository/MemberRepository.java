@@ -21,7 +21,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
                 "WHERE m.memberName = :#{#member.memberName} " +
                 "AND m.memberPw = :#{#member.memberPw}"
     )
-    Map<String, Object> findByMemberName(@Param(value = "member") MemberVO memberVO);
+    Map<String, Object> searchMember(@Param(value = "member") MemberVO memberVO);
 
     @Modifying
     @Transactional
@@ -39,7 +39,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
                 "FROM Member m " +
                 "WHERE m.userToken = :userToken"
     )
-    Map<String, Object> findByUserToken(@Param(value = "userToken") String userToken);
+    Map<String, Object> getMember(@Param(value = "userToken") String userToken);
 
 
 }

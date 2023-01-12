@@ -8,17 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileUpload {
-    private Integer memberId;
-
     private String fileName;
 
-    private String filePath;
-
-    private Integer boardItemId;
-
-    private String fileOrigName;
-
     private String fileSize;
-
-    private String fileUpDate;
 }

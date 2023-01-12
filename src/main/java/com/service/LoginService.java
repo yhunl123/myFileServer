@@ -47,7 +47,7 @@ public class LoginService {
             memberVO.setMemberName(params.get("memberName").toString());
             memberVO.setMemberPw(params.get("memberPw").toString());
 
-            Map<String, Object> result = memberRepository.findByMemberName(memberVO);
+            Map<String, Object> result = memberRepository.searchMember(memberVO);
 
             if (!result.isEmpty()) {
                 logger.info("result :>>>> {}", result.get("memberName").toString(), ", ", result.get("memberAuth").toString());
