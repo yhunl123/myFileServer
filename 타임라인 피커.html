@@ -70,27 +70,28 @@
         <button id="start-btn">시작</button>
         <button id="stop-btn">일시정지</button>
         <button id="reset-btn">리셋</button>
-        <p>영상 시작과 동시에 시작버튼을 눌러주세요.</p>
+        <p>영상 시작과 동시에 시작버튼을 눌러주세요.</p><hr/>
+        <div id="time_line_group">
+            <label for="input-time-form">
+                타임라인 직접 입력 :
+                <input id="input-time-form"/>
+            </label>
+            <button id="input-time-btn">입력</button>
+            <p>특정 타임라인에서 시작하고 싶다면 시:분:초 형식으로 입력해주세요.</p>
+        </div>
     </div><hr/>
     <div id="recode_btn_group">
         <button id="recode-btn" style="display: unset">타임라인 기록시작</button>
-        <button id="endRec-btn" style="display: none">타임라인 기록종료</button>
+        <button id="endRec-btn" style="display: none">타임라인 기록종료</button><br/><br/>
         <p id="recode-text" style="display: unset">타임라인 기록시작 버튼을 누르면 타임라인 시작점이 기록됩니다.</p>
         <p id="endRec-text" style="display: none">타임라인 기록종료 버튼을 누르면 타임라인 종료점이 기록되며 자동으로 타임라인이 클립보드에 복사됩니다.</p>
-    </div><hr/>
+    </div>
     <h1>타임라인 :
         <span>
             <span id="startTimer"></span> ~ <span id="endTimer"></span>
         </span>
-    </h1><br/>
-    <div id="time_line_group">
-        <label for="input-time-form">
-            타임라인 직접 입력 :
-            <input id="input-time-form"/>
-        </label>
-        <button id="input-time-btn">입력</button>
-        <p>특정 타임라인에서 시작하고 싶다면 시:분:초 형식으로 입력해주세요.</p>
-    </div><hr/>
+    </h1><hr/>
+
     <div>
         <button id="copy-btn">타임라인 복사하기</button>
         <p>기록된 타임라인을 클립보드에 복사합니다.</p>
