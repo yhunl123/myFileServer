@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>타임라인</title>
+</head>
+<body>
+    <h1 id="timer">00:00:00</h1>
+    <button id="start-btn">시작</button>
+    <button id="stop-btn">일시정지</button>
+    <button id="reset-btn">리셋</button><br/><br/>
+    <button id="recode-btn" style="display: unset">기록</button>
+    <button id="endRec-btn" style="display: none">기록종료</button><br/><br/>
+
+    <h1>타임라인 :
+        <span>
+            <span id="startTimer"></span> ~ <span id="endTimer"></span>
+        </span>
+    </h1><br/>
+
+    <button id="copy-btn">복사하기</button>
+
+    <script>
+        let timerId; // 타이머 식별자
+        let recodeStartTime;
+        let recodeEndTime;
+        let isStart = false;
+
+        const timer = document.getElementById('timer');
+        const recodeStartTimer = document.getElementById('startTimer');
+        const recodeEndTimer = document.getElementById('endTimer');
+
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const recodeBtn = document.getElementById('recode-btn');
+        const endRecodeBtn = document.getElementById('endRec-btn');
+        const copyBtn = document.getElementById('copy-btn');
+
+        let seconds = 0; // 초
+
+        // 초 시계 업데이트 함수
+        const updateTimer = () => {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            timer.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            seconds++;
+        }
+
+        // 스탑워치 시작 함수
+        const startTimer = () => {
+            if (isStart) {
+                return;
+            }
+            isStart = true;
+            updateTimer();
+            timerId = setInterval(updateTimer, 1000);
+        }
+
+        // 스탑워치 멈춤 함수
+        const stopTimer = () => {
+            isStart = false;
+            clearInterval(timerId);
+        }
+
+        // 스탑워치 초기화 함수
+        const resetTimer = () => {
+            isStart = false;
+            seconds = 0;
+            recodeStartTime = '';
+            recodeEndTime = '';
+            recodeStartTimer.textContent = '';
+            recodeEndTimer.textContent = '';
+            recodeBtn.style.display = 'unset';
+            endRecodeBtn.style.display = 'none';
+            stopTimer();
+            timer.textContent = '00:00:00';
+        }
+
+        //현재 타임라인부터 기록시작
+        const recodeStart = () => {
+            recodeStartTime = '';
+            recodeEndTime = '';
+            recodeStartTimer.textContent = '';
+            recodeEndTimer.textContent = '';
+
+            recodeStartTime = timer.textContent;
+            recodeStartTimer.textContent = recodeStartTime;
+            recodeBtn.style.display = 'none';
+            endRecodeBtn.style.display = 'unset';
+        }
+
+        //현재 타임라인까지 기록종료
+        const recodeEnd = () => {
+            recodeEndTime = timer.textContent;
+            recodeEndTimer.textContent = recodeEndTime;
+            recodeBtn.style.display = 'unset';
+            endRecodeBtn.style.display = 'none';
+            timeCopy();
+        }
+
+        const timeCopy = () => {
+            const textarea = document.createElement('textarea');
+            textarea.value = `${recodeStartTime} ~ ${recodeEndTime}`;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+        }
+
+        // 이벤트 리스너 등록
+        startBtn.addEventListener('click', startTimer);
+        stopBtn.addEventListener('click', stopTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        recodeBtn.addEventListener('click', recodeStart);
+        endRecodeBtn.addEventListener('click', recodeEnd);
+        copyBtn.addEventListener('click', timeCopy);
+
+    </script>
+</body>
+</html>
