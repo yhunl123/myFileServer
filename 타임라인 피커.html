@@ -30,6 +30,12 @@
             color: skyblue;
             padding: 10px;
         }
+        #timer_btn_group #mul-apply-btn{
+            border: 2px solid black;
+            background-color: rgba(0,0,0,0);
+            color: black;
+            padding: 5px;
+        }
         #recode_btn_group #recode-btn,#endRec-btn,#copy-btn{
             border: 2px solid black;
             background-color: rgba(0,0,0,0);
@@ -54,6 +60,10 @@
             color:white;
             background-color: skyblue;
         }
+        #timer_btn_group #mul-apply-btn:hover{
+            color:white;
+            background-color: black;
+        }
         #recode_btn_group #recode-btn:hover,#endRec-btn:hover,#copy-btn:hover{
             color:white;
             background-color: black;
@@ -70,7 +80,12 @@
         <button id="start-btn">시작</button>
         <button id="stop-btn">일시정지</button>
         <button id="reset-btn">리셋</button>
-        <p>영상 시작과 동시에 시작버튼을 눌러주세요.</p><hr/>
+        <p>영상 시작과 동시에 시작버튼을 눌러주세요.</p>
+        <div>
+            <label for="multi-input">현재 배속 : <input id="multi-input" value="1"></label>
+            <button id="mul-apply-btn">배속적용</button>
+            <p>재생하고 싶은 배속을 입력하고 적용을 누르면 해당 배속으로 시간이 증가됩니다.</p>
+        </div><hr/>
         <div id="time_line_group">
             <label for="input-time-form">
                 타임라인 직접 입력 :
@@ -112,6 +127,7 @@
         const inputTimer = document.getElementById('input-time-form');
         const recodeText = document.getElementById('recode-text');
         const endRecText = document.getElementById('endRec-text');
+        const multiInput = document.getElementById('multi-input');
 
         const startBtn = document.getElementById('start-btn');
         const stopBtn = document.getElementById('stop-btn');
@@ -120,8 +136,12 @@
         const endRecodeBtn = document.getElementById('endRec-btn');
         const copyBtn = document.getElementById('copy-btn');
         const inputTimeBtn = document.getElementById('input-time-btn');
+        const mulApplyBtn = document.getElementById('mul-apply-btn');
 
         let seconds = 0; // 초
+        let mulValue = 1;
+        let playSpeed = 1000;
+        let changeLock = false;
 
         // 초 시계 업데이트 함수
         const updateTimer = () => {
@@ -139,7 +159,7 @@
             }
             isStart = true;
             updateTimer();
-            timerId = setInterval(updateTimer, 1000);
+            timerId = setInterval(updateTimer, playSpeed);
         }
 
         // 스탑워치 멈춤 함수
@@ -159,6 +179,9 @@
             recodeBtn.style.display = 'unset';
             endRecodeBtn.style.display = 'none';
             inputTimer.value = '';
+            playSpeed = 1000;
+            mulValue = 10;
+            multiInput.value = 1.0;
             stopTimer();
             timer.textContent = '00:00:00';
         }
@@ -220,6 +243,16 @@
             return convertedArr.join(":"); // 시:분:초 형식으로 변환된 문자열 반환
         }
 
+        const settingMul = () => {
+            if (!changeLock) {
+                changeLock = true;
+                playSpeed = 1000 / multiInput.value;
+                if (isStart) {
+                    stopTimer();
+                    startTimer();
+                }
+            }
+        }
 
         // 이벤트 리스너 등록
         startBtn.addEventListener('click', startTimer);
@@ -229,7 +262,11 @@
         endRecodeBtn.addEventListener('click', recodeEnd);
         copyBtn.addEventListener('click', timeCopy);
         inputTimeBtn.addEventListener('click', inputTimeData);
-
+        mulApplyBtn.addEventListener('click', settingMul);
+        multiInput.addEventListener('input', (event) => {
+            mulValue = Number(event.target.value);
+            changeLock = false;
+        })
     </script>
 </body>
 </html>
