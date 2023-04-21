@@ -1,6 +1,7 @@
 package com.service;
 
 import com.VO.FileVO;
+import com.VO.ThumbImageVO;
 import com.VO.resultVO.ErrorVO;
 import com.VO.resultVO.FileResult;
 import com.VO.resultVO.ResultVO;
@@ -8,7 +9,10 @@ import com.VO.resultVO.apiResult.FileUpload;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.repository.FileDataRepository;
+import com.repository.FileThumbImageRepository;
 import com.repository.MemberRepository;
+import com.table.FileData;
+import com.table.FileThumbImage;
 import com.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,16 +21,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.NoSuchFileException;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.UUID;
+
 
 @Service
 public class FileService {
@@ -34,10 +38,16 @@ public class FileService {
     private final ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE);
     private final FileUtil fileUtil = new FileUtil();
 
-    private final String filePath = "D:/test";
+//    private final String filePath = "D:/test";
+//    private final String thumbImgPath = "D:/test/thumb";
+    private final String filePath = "E:/downloads/asdasd/temp/myFileServer/file";
+    private final String thumbImgPath = "E:/downloads/asdasd/temp/myFileServer/file/thumb";
 
     @Autowired
     private FileDataRepository fileDataRepository;
+
+    @Autowired
+    private FileThumbImageRepository fileThumbImageRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -51,10 +61,9 @@ public class FileService {
 
         ErrorVO errorVO = new ErrorVO();
 
-
         try {
-            String userToken = request.getHeader("user-token");
-            if ("".equals(request.getHeader("user-token"))) {
+            String userToken = request.getHeader("Authorization");
+            if ("".equals(userToken)) {
                 resultVO.setSuccess(false);
                 errorVO.setCode(110);
                 errorVO.setMessage("User not find");
@@ -89,14 +98,41 @@ public class FileService {
                 fileVO.setFileName(upFileName);
                 fileVO.setFilePath(path);
 
+                //파일 업로드 경로의 디렉토리 생성
                 fileUtil.makeDir(fileVO.getFilePath());
 
+                // 파일 업로드
                 upFile.transferTo(new File(fileVO.getFilePath(), fileVO.getFileName()));
                 fileDataRepository.insertFileData(fileVO);
+                fileVO.setFileId((Integer) fileDataRepository.searchFileDataByFileName(fileVO.getFileName()).get("fileId"));
+
+                // 섬네일 추출
+                try {
+                    BufferedImage thumbImg = fileUtil.extract(path+upFileName, 10);
+                    String thumbPath = thumbImgPath + "/" + userInfo.get("memberId").toString() + "/";
+
+                    fileUtil.makeDir(thumbPath);
+
+                    File thumbFile = new File(thumbPath+upFileName+"_thumb.png");
+                    logger.info(thumbImg.toString());
+                    ImageIO.write(thumbImg, "png", thumbFile);
+
+                    FileThumbImage fileThumbImage = new FileThumbImage();
+                    ThumbImageVO thumbImageVO = new ThumbImageVO();
+                    thumbImageVO.setFdThumbPath(thumbPath);
+                    thumbImageVO.setFdThumbName(upFileName+"_thumb.png");
+                    thumbImageVO.setFdThumbSize(thumbFile.length());
+                    thumbImageVO.setFkFileSeq(fileVO.getFileId());
+
+                    fileThumbImageRepository.save(objectMapper.convertValue(thumbImageVO, FileThumbImage.class));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 FileUpload fileUpload = new FileUpload();
 
                 fileUpload.setFileName(fileVO.getFileName());
+                fileUpload.setFileOrigName(fileVO.getFileOrigName());
                 fileUpload.setFileSize(fileVO.getFileSize());
 
                 FileResult.FileUploadDataView data = new FileResult.FileUploadDataView();
@@ -128,8 +164,8 @@ public class FileService {
         try {
             fileVO.setFileName(params.get("fileName").toString());
 
-            String userToken = request.getHeader("user-token");
-            if ("".equals(request.getHeader("user-token"))) {
+            String userToken = request.getHeader("Authorization");
+            if ("".equals(userToken)) {
                 resultVO.setSuccess(false);
                 errorVO.setCode(110);
                 errorVO.setMessage("User not find");

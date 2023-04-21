@@ -14,8 +14,12 @@ public interface BoardItemRepository extends JpaRepository<BoardItem, Integer> {
         value = "SELECT " +
                 "b.boardItemId as boardItemId, " +
                 "b.boardItemTitle as boardItemTitle, " +
-                "b.boardItemCtDate as boardItemCtDate " +
-                "FROM BoardItem b"
+                "b.boardItemCtDate as boardItemCtDate, " +
+                "t.fdThumbPath as fdThumbPath, " +
+                "t.fdThumbName as fdThumbName " +
+                "FROM BoardItem b " +
+                "LEFT OUTER JOIN FileData f ON b.boardItemId = f.boardItemId " +
+                "LEFT OUTER JOIN FileThumbImage t ON f.fileId = t.fkFileSeq"
     )
     List<Map<String, Object>> getBoardItemList(@Param(value = "pagination") Map<String, Object> pageInfo);
 }

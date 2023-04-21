@@ -2,10 +2,7 @@ package com.table;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table(name = "FileData")
 @Entity
@@ -13,6 +10,7 @@ import javax.persistence.Table;
 public class FileData {
     @Id
     @Column(name = "file_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer fileId;
 
     @Column(name = "file_name", nullable = false)

@@ -1,18 +1,14 @@
 package com.util;
 
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.Java2DFrameConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class FileUtil {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -36,27 +32,21 @@ public class FileUtil {
         }
     }
 
-//    public ResponseEntity<Resource> setHeader(String path, String name, String oriName) throws IOException {
-//        File file = new File(path + "/" + name);
-//
-//        String fileName = new String(oriName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
-//
-//        HttpHeaders headers = new HttpHeaders();
-//
-//        FileInputStream stream = new FileInputStream(file);
-//        ByteArrayResource bResource = new ByteArrayResource(stream.readAllBytes());
-////        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-//
-//        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
-//        headers.add(HttpHeaders.PRAGMA, "no-cache");
-//        headers.add(HttpHeaders.EXPIRES, "0");
-//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
-//        headers.add("filename", fileName);
-//
-//        return ResponseEntity.ok()
-//                .headers(headers)
-//                .contentLength(bResource.contentLength())
-//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                .body(bResource);
-//    }
+    public BufferedImage extract(String filePath, long timeUs) throws Exception {
+        try (FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(filePath)) {
+            grabber.start();
+
+            // timeUs에 해당하는 프레임으로 위치 이동
+            int frameNumber = (int) Math.round(grabber.getFrameRate() * timeUs / 1000000.0);
+            grabber.setFrameNumber(frameNumber);
+
+            // 프레임 이미지 추출
+            Frame frame = grabber.grabImage();
+            Java2DFrameConverter converter = new Java2DFrameConverter();
+            BufferedImage image = converter.convert(frame);
+
+            grabber.stop();
+            return image;
+        }
+    }
 }

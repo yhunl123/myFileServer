@@ -1,5 +1,5 @@
 <script>
-    import axios from "axios";
+    import instance from "../../axios/axios.js";
 
 
     let loginForm = {
@@ -21,7 +21,7 @@
         formData.append("memberName", loginForm.memberName)
         formData.append("memberPw", loginForm.memberPw)
 
-        axios.post('/api/login/login', formData)
+        instance.post('/api/login/login', formData)
             .then((res) => {
                 const data = res.data.data.view;
                 if (res.data.success) {

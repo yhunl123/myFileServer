@@ -1,10 +1,8 @@
 package com.controller;
 
 import com.VO.resultVO.FileResult;
-import com.VO.resultVO.LoginResult;
 import com.VO.resultVO.ResultVO;
 import com.service.FileService;
-import com.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

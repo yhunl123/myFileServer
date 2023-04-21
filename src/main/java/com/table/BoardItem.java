@@ -3,6 +3,7 @@ package com.table;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Table(name = "BoardItem")
 @Entity
@@ -26,4 +27,8 @@ public class BoardItem {
     @Column(name = "board_item_ct_date")
     private String boardItemCtDate;
 
+    @PrePersist
+    public void prePersist() {
+        this.boardItemCtDate = String.valueOf(LocalDateTime.now());
+    }
 }

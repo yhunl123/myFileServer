@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 public class FileUpload {
     private String fileName;
 
+    private String fileOrigName;
+
     private String fileSize;
 }

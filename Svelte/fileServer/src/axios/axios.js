@@ -1,8 +1,17 @@
-import Axios from 'axios';
+import axios from 'axios';
 
-// baseURL 설정
-const axios = Axios.create({
-    baseURL: 'http://localhost:8089',
+const instance = axios.create({
+    baseURL: 'http://192.168.0.16:3000',
 });
 
-export default axios;
+instance.interceptors.request.use((config) => {
+    if(localStorage.getItem('userToken')) {
+        config.headers.Authorization = localStorage.getItem('userToken');
+    }
+
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
+export default instance;

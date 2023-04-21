@@ -4,7 +4,6 @@ import com.VO.BoardItemVO;
 import com.VO.FileVO;
 import com.VO.resultVO.BoardItemResult;
 import com.VO.resultVO.ErrorVO;
-import com.VO.resultVO.LoginResult;
 import com.VO.resultVO.apiResult.BoardItemList;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -50,7 +49,7 @@ public class BoardItemService {
         ErrorVO errorVO = new ErrorVO();
 
         try {
-            String userToken = request.getHeader("user-token");
+            String userToken = request.getHeader("Authorization");
 
             Map userInfo = memberRepository.getMember(userToken);
 

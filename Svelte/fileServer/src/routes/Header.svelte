@@ -35,14 +35,11 @@
             <li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
                 <a href="/">Home</a>
             </li>
-            <li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-                <a href="/about">About</a>
-            </li>
             <li aria-current={$page.url.pathname === '/board' ? 'page' : undefined}>
                 <a href="/board">Board</a>
             </li>
-            <li aria-current={$page.url.pathname === '/prototype' ? 'page' : undefined}>
-                <a href="/prototype">Prototype</a>
+            <li aria-current={$page.url.pathname === '/board/write' ? 'page' : undefined}>
+                <a href="/board/write">upload</a>
             </li>
         </ul>
         <svg viewBox="0 0 2 3" aria-hidden="true">
