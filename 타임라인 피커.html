@@ -72,47 +72,98 @@
             color:white;
             background-color: black;
         }
+        .container {
+            display: flex;
+        }
+        .column {
+            flex: 1;
+            padding: 10px;
+        }
+        .middle-column{
+            flex: none;
+            padding: 10px;
+        }
+        .history-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        .history-table th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+            vertical-align: top;
+        }
+        .history-table th {
+            background-color: #eee;
+        }
+
     </style>
 </head>
 <body>
-    <h1 id="timer">00:00:00</h1>
-    <div id="timer_btn_group">
-        <button id="start-btn">시작</button>
-        <button id="stop-btn">일시정지</button>
-        <button id="reset-btn">리셋</button>
-        <p>영상 시작과 동시에 시작버튼을 눌러주세요.</p>
-        <div>
-            <label for="multi-input">현재 배속 : <input id="multi-input" value="1"></label>
-            <button id="mul-apply-btn">배속적용</button>
-            <p>재생하고 싶은 배속을 입력하고 적용을 누르면 해당 배속으로 시간이 증가됩니다.</p>
-        </div><hr/>
-        <div id="time_line_group">
-            <label for="input-time-form">
-                타임라인 직접 입력 :
-                <input id="input-time-form"/>
-            </label>
-            <button id="input-time-btn">입력</button>
-            <p>특정 타임라인에서 시작하고 싶다면 시:분:초 형식으로 입력해주세요.</p>
-        </div>
-    </div><hr/>
-    <div id="recode_btn_group">
-        <button id="recode-btn" style="display: unset">타임라인 기록시작</button>
-        <button id="endRec-btn" style="display: none">타임라인 기록종료</button><br/><br/>
-        <p id="recode-text" style="display: unset">타임라인 기록시작 버튼을 누르면 타임라인 시작점이 기록됩니다.</p>
-        <p id="endRec-text" style="display: none">타임라인 기록종료 버튼을 누르면 타임라인 종료점이 기록되며 자동으로 타임라인이 클립보드에 복사됩니다.</p>
-    </div>
-    <h1>타임라인 :
-        <span>
-            <span id="startTimer"></span> ~ <span id="endTimer"></span>
-        </span>
-    </h1><hr/>
+    <div class="container">
+        <div class="column left-column">
+            <h1 id="timer">00:00:00</h1>
+            <div id="timer_btn_group">
+                <button id="start-btn">시작</button>
+                <button id="stop-btn">일시정지</button>
+                <button id="reset-btn">리셋</button>
+                <p>영상 시작과 동시에 시작버튼을 눌러주세요.</p>
+                <div>
+                    <label for="multi-input">현재 배속 : <input id="multi-input" value="1"></label>
+                    <button id="mul-apply-btn">배속적용</button>
+                    <p>재생하고 싶은 배속을 입력하고 적용을 누르면 해당 배속으로 시간이 증가됩니다.</p>
+                </div>
+                <hr/>
+                <div id="time_line_group">
+                    <label for="input-time-form">
+                        타임라인 직접 입력 :
+                        <input id="input-time-form"/>
+                    </label>
+                    <button id="input-time-btn">입력</button>
+                    <p>특정 타임라인에서 시작하고 싶다면 시:분:초 형식으로 입력해주세요.</p>
+                </div>
+            </div>
+            <hr/>
+            <div id="recode_btn_group">
+                <button id="recode-btn" style="display: unset">타임라인 기록시작</button>
+                <button id="endRec-btn" style="display: none">타임라인 기록종료</button>
+                <br/><br/>
+                <p id="recode-text" style="display: unset">타임라인 기록시작 버튼을 누르면 타임라인 시작점이 기록됩니다.</p>
+                <p id="endRec-text" style="display: none">타임라인 기록종료 버튼을 누르면 타임라인 종료점이 기록되며 자동으로 타임라인이 클립보드에 복사됩니다.</p>
+            </div>
+            <h1>타임라인 :
+                <span>
+                <span id="startTimer"></span> ~ <span id="endTimer"></span>
+            </span>
+            </h1>
+            <hr/>
 
-    <div>
-        <button id="copy-btn">타임라인 복사하기</button>
-        <p>기록된 타임라인을 클립보드에 복사합니다.</p>
-        <p>타임라인 시작점만 복사하고 싶다면 타임라인 기록시작 버튼을 누르고 이 버튼을 눌러주세요.</p>
-    </div><hr>
-    <h3>버그 발견 시 디스코드 아이디 : 디즈#3422 로 연락바랍니다.</h3>
+            <div>
+                <button id="copy-btn">타임라인 복사하기</button>
+                <p>기록된 타임라인을 클립보드에 복사합니다.</p>
+                <p>타임라인 시작점만 복사하고 싶다면 타임라인 기록시작 버튼을 누르고 이 버튼을 눌러주세요.</p>
+            </div>
+            <hr>
+            <h3>버그 발견 시 디스코드 아이디 : 디즈#3422 로 연락바랍니다.</h3>
+        </div>
+        <div class="column middle-column">
+            <h1>타임라인 히스토리</h1>
+            <table class="history-table">
+                <thead>
+                <tr>
+                    <th>타임스탬프</th>
+                </tr>
+                </thead>
+                <tbody id="history-list">
+
+                <!-- 이하 생략 -->
+                </tbody>
+            </table>
+        </div>
+        <div class="column right-column">
+        </div>
+    </div>
 
     <script>
         let timerId; // 타이머 식별자
@@ -138,10 +189,14 @@
         const inputTimeBtn = document.getElementById('input-time-btn');
         const mulApplyBtn = document.getElementById('mul-apply-btn');
 
+        const historyList = document.getElementById('history-list');
+
         let seconds = 0; // 초
         let mulValue = 1;
         let playSpeed = 1000;
         let changeLock = false;
+        let copyValue;
+        let historyTag = '';
 
         // 초 시계 업데이트 함수
         const updateTimer = () => {
@@ -219,7 +274,8 @@
             textarea.select();
             document.execCommand('copy');
             document.body.removeChild(textarea);
-
+            copyValue = textarea.value;
+            addHistory();
         }
 
         const inputTimeData = () => {
@@ -252,6 +308,15 @@
                     startTimer();
                 }
             }
+        }
+
+        const addHistory = () => {
+            historyTag = `
+                <tr>
+                    <td>${copyValue}</td>
+                </tr>
+                ` + historyTag
+            historyList.innerHTML = historyTag;
         }
 
         // 이벤트 리스너 등록
